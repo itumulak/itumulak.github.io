@@ -14,7 +14,7 @@ A personal portfolio and blog site, ported from an existing React SPA (`~/Projec
 | 3 | Blog content model | Foundation | done |
 | 4 | Design system & UI foundation | Foundation | done |
 | 5 | Local dev to deploy walking skeleton | Skeleton | in-progress |
-| 6 | Home page port | Slice 2 | in-progress |
+| 6 | Home page port | Slice 2 | done |
 | 7 | Blog section on home page | Slice 3 | planned |
 | 8 | Blog listing page | Slice 3 | planned |
 | 9 | Single article page | Slice 4 | planned |
@@ -80,6 +80,7 @@ Full port of the existing single page site (menu, hero/avatar, headline, experie
 **Done when:** every section from the existing site renders with the same content, is fully responsive across mobile, tablet, and desktop, and matches existing functionality (menu navigation, modal, reveal animations).
 - [x] Build it: `/develop home page port`
   Code: `app/src/pages/index.astro`, `app/src/features/home/data.ts`, `app/src/assets/{me.jpg,ecommerce.png,mern-stack.jpg,firebase-auth.png,docker.png}`, `app/public/resume.pdf`. First pass was checked only against a local, partly stale clone of the legacy repo (uncommitted draft edits + an under-read component); re-verified against the live production site (iantumulak-website.vercel.app) and corrected several real mismatches: `app/src/components/Menu.tsx` (mobile drawer clipped to header height by a `backdrop-filter` containing block; missing `emphasized` pill style for the Resume link), `app/src/components/Timeline.tsx` (wrong layout — default two-column instead of legacy's single left column; company/role text colors swapped; third-party `animate` scroll-reveal left content stuck at `visibility:hidden`, duplicating the project's own `Reveal` primitive), `index.astro` (hero avatar wasn't positioned beside the heading like legacy's desktop layout; About bio paragraphs and one Experience description used draft text instead of the live copy; Contact heading wrongly forced through the shared `Headline` component instead of its own bespoke centered style), `global.css` (added `scroll-behavior: smooth` matching legacy's smooth anchor-scroll, honoring `prefers-reduced-motion`)
+- [x] Verify it: `/check verify`, all Done-when criteria confirmed live (content parity against production, responsive at desktop/tablet/mobile, menu open/close/focus-trap/Escape/anchor-nav/Resume link, reveal animations, project/pill/mailto links); `prefers-reduced-motion` behavior blocked (no OS-level media-emulation tool available this session) but the `useReducedMotion()` code path is in place. `pnpm check` and `pnpm build` both clean.
 
 ## Slice 3: Blog listing
 
