@@ -12,8 +12,8 @@ A personal portfolio and blog site, ported from an existing React SPA (`~/Projec
 | 1 | Stack & architecture | Foundation | in-progress |
 | 2 | Coding standards & tooling | Foundation | done |
 | 3 | Blog content model | Foundation | done |
-| 4 | Design system & UI foundation | Foundation | in-progress |
-| 5 | Local dev to deploy walking skeleton | Skeleton | planned |
+| 4 | Design system & UI foundation | Foundation | done |
+| 5 | Local dev to deploy walking skeleton | Skeleton | in-progress |
 | 6 | Home page port | Slice 2 | planned |
 | 7 | Blog section on home page | Slice 3 | planned |
 | 8 | Blog listing page | Slice 3 | planned |
@@ -57,6 +57,13 @@ Markdown/MDX content shape for blog posts (Astro content collections): frontmatt
 How the existing site's visual language and components (Menu, Avatar, Headline, Timeline, Card, Socials, Pill, Modal, Reveal, Tags) port into Astro: which of Tailwind, MUI, styled components, and Framer Motion carry over versus get replaced by lighter equivalents, base layout, and responsive breakpoints. This decision also carries the performance and accessibility goals (partial hydration, minimal shipped JS).
 **Done when:** `design.md` covers the ported component set, type and spacing, and states which original libraries are kept versus dropped and why.
 - [x] Design it (spec): [0003](../specs/0003-design-system-ui-foundation/index.md)
+- [x] Build it: `/develop design system & UI foundation`
+  - [x] Tokens, layer order, self-hosted Poppins, base layout (`global.css`, `Layout.astro`)
+  - [x] 13 ported components + shared icon registry (`app/src/components/`)
+  - [x] `design.md`: character, component set, type/spacing, kept vs. dropped libraries
+  Code: `app/src/components/`, `app/src/layouts/Layout.astro`, `app/src/styles/global.css`, `app/design.md`
+- [x] Verify it: `/check verify`, production build fixed (missing `sharp` dependency), accessibility (Menu `aria-expanded`/`Escape`/scroll-lock, Tags/Card sr-only names), icon-prop serialization, and Pill contrast confirmed live; focus-trap/focus-restore blocked in the automated browser tab (couldn't receive DOM focus at all), locked in via `/test` instead
+- [x] Test it: `/test`, 30 tests across 5 files (`icons`, `Reveal`, `Menu`, `Socials`, `Timeline`), including the focus-trap and focus-restore behavior `/check verify` couldn't exercise
 
 ## Skeleton
 
@@ -64,6 +71,7 @@ How the existing site's visual language and components (Menu, Avatar, Headline, 
 The thinnest real thread through every layer: Astro scaffold renders one placeholder page, `docker compose up` serves it locally at `iantumulak.localhost`, and a GitHub Actions workflow builds and publishes it live on GitHub Pages. Proves the pipe connects before any real page is built.
 **Done when:** a change pushed to the branch is visible on the live GitHub Pages URL, and local dev via the Docker proxy reflects edits live.
 - [ ] Build it: `/develop local dev to deploy walking skeleton`
+  Local dev leg proven: `docker compose up`, `iantumulak.localhost` returns 200 through Traefik. Deploy leg blocked: repo (`itumulak/itumulak.github.io`) is private, GitHub Pages needs a public repo or a paid plan; engineer chose to skip this leg for now. Resume by making the repo public (or confirming a paid plan), then push to `main` and confirm the live URL serves the page.
 
 ## Slice 2: Home page port
 

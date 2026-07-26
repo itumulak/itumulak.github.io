@@ -1,0 +1,30 @@
+@layer mui, theme, base, components, utilities;
+
+@import '@fontsource/poppins/200.css';
+@import '@fontsource/poppins/300.css';
+@import '@fontsource/poppins/400.css';
+@import '@fontsource/poppins/500.css';
+@import '@fontsource/poppins/600.css';
+@import '@fontsource/poppins/700.css';
+@import '@fontsource/poppins/900.css';
+
+@import 'tailwindcss';
+
+@import 'react-vertical-timeline-component/style.min.css' layer(components);
+
+@theme {
+  --color-brand: #0aff9d;
+  --color-brand-dark: #0f6b45;
+  --color-bg: #282c34;
+  --color-light-dark: #232323;
+  --color-text: #ebecf3;
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+  }
+}

@@ -1,0 +1,84 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { IconType } from 'react-icons';
+import { FiGlobe, FiPlayCircle } from 'react-icons/fi';
+import { FaGithub } from 'react-icons/fa';
+import { Reveal } from './Reveal';
+
+type LinkType = 'website' | 'github' | 'video';
+
+interface CardLink {
+  type: LinkType;
+  url: string;
+}
+
+interface Stack {
+  name: string;
+  icon: IconType;
+}
+
+interface Props {
+  src: ImageMetadata;
+  name: string;
+  summary: string;
+  links: CardLink[];
+  stacks: Stack[];
+}
+
+const { src, name, summary, links, stacks } = Astro.props;
+
+const linkMeta: Record<LinkType, { icon: IconType; label: string }> = {
+  website: { icon: FiGlobe, label: 'Visit live site' },
+  github: { icon: FaGithub, label: 'View source on GitHub' },
+  video: { icon: FiPlayCircle, label: 'Watch video' },
+};
+---
+
+<article class="bg-light-dark flex flex-col gap-y-4 rounded-lg p-6">
+  <Image
+    src={src}
+    alt={name}
+    width={640}
+    height={360}
+    class="aspect-video w-full rounded-md object-cover"
+  />
+
+  <div class="flex items-center justify-between">
+    <h3 class="text-text text-xl font-bold">{name}</h3>
+    <div class="flex items-center gap-x-3">
+      {
+        links.map(({ type, url }) => {
+          const { icon: Icon, label } = linkMeta[type];
+          return (
+            <a
+              href={url}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={label}
+              class="text-text hover:text-brand transition-transform hover:scale-[1.2]"
+            >
+              <Icon aria-hidden="true" />
+            </a>
+          );
+        })
+      }
+    </div>
+  </div>
+
+  <Reveal client:visible={{ rootMargin: '200px' }}>
+    <div class="flex flex-col gap-y-3">
+      <p class="text-text/80">{summary}</p>
+      <ul class="flex flex-wrap gap-2">
+        {
+          stacks.map(({ name: stackName, icon: Icon }) => (
+            <li class="text-text/70 flex items-center gap-x-1 text-sm">
+              <Icon aria-hidden="true" />
+              <span class="sr-only">{stackName}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Reveal>
+</article>

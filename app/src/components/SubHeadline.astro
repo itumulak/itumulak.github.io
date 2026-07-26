@@ -1,0 +1,18 @@
+---
+import { Reveal } from './Reveal';
+import type { IconType } from 'react-icons';
+
+interface Props {
+  icon: IconType;
+  text: string;
+}
+
+const { icon: Icon, text } = Astro.props;
+---
+
+<Reveal client:visible={{ rootMargin: '200px' }}>
+  <div class="text-text flex items-center gap-x-2">
+    <Icon aria-hidden="true" />
+    <span class="font-semibold">{text}</span>
+  </div>
+</Reveal>

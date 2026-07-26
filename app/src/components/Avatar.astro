@@ -1,0 +1,22 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { Reveal } from './Reveal';
+
+interface Props {
+  src: ImageMetadata;
+  name: string;
+}
+
+const { src, name } = Astro.props;
+---
+
+<Reveal client:visible={{ rootMargin: '200px' }}>
+  <Image
+    src={src}
+    alt={name}
+    width={200}
+    height={200}
+    class="border-brand h-[200px] w-[200px] rounded-full border-2 object-cover"
+  />
+</Reveal>

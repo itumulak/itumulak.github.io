@@ -1,0 +1,21 @@
+---
+import { Reveal } from './Reveal';
+
+interface Props {
+  name: string;
+  url: string;
+}
+
+const { name, url } = Astro.props;
+---
+
+<Reveal client:visible={{ rootMargin: '200px' }}>
+  <a
+    href={url}
+    target="_blank"
+    rel="noreferrer"
+    class="bg-brand-dark text-text inline-block rounded px-3 py-1 text-sm"
+  >
+    {name}
+  </a>
+</Reveal>

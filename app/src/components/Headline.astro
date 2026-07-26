@@ -1,0 +1,51 @@
+---
+import { Reveal } from './Reveal';
+
+interface Props {
+  text: string;
+  isRight?: boolean;
+  sizes?: { xs?: string; md?: string };
+  weight?: 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  gap?: number;
+}
+
+const {
+  text,
+  isRight = false,
+  sizes = { xs: '30px', md: '48px' },
+  weight = 'black',
+  gap = 8,
+} = Astro.props;
+
+const weightClass: Record<NonNullable<Props['weight']>, string> = {
+  normal: 'font-normal',
+  medium: 'font-medium',
+  semibold: 'font-semibold',
+  bold: 'font-bold',
+  extrabold: 'font-extrabold',
+  black: 'font-black',
+};
+---
+
+<div
+  class:list={['flex flex-wrap items-center', isRight ? 'justify-end text-right' : 'justify-start']}
+  style={{
+    gap: `${gap * 0.25}rem`,
+    '--headline-size-xs': sizes.xs,
+    '--headline-size-md': sizes.md,
+  }}
+>
+  <span class="bg-brand h-1 w-10 shrink-0"></span>
+  <Reveal client:visible={{ rootMargin: '200px' }}>
+    <span
+      class:list={[
+        'text-text leading-tight',
+        weightClass[weight],
+        'text-[length:var(--headline-size-xs)]',
+        'md:text-[length:var(--headline-size-md)]',
+      ]}
+    >
+      {text}
+    </span>
+  </Reveal>
+</div>

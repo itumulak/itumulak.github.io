@@ -1,0 +1,36 @@
+---
+import { Reveal } from './Reveal';
+import type { IconType } from 'react-icons';
+
+interface Tag {
+  name: string;
+  icon: IconType;
+}
+
+interface Props {
+  tags: Tag[];
+  icon: IconType;
+  label: string;
+}
+
+const { tags, icon: LabelIcon, label } = Astro.props;
+---
+
+<Reveal client:visible={{ rootMargin: '200px' }}>
+  <div class="flex flex-col gap-y-2">
+    <div class="text-text/80 flex items-center gap-x-2 text-sm font-semibold">
+      <LabelIcon aria-hidden="true" />
+      <span>{label}</span>
+    </div>
+    <ul class="flex flex-wrap gap-3">
+      {
+        tags.map(({ name, icon: Icon }) => (
+          <li class="text-text/70 flex items-center gap-x-1 text-lg">
+            <Icon aria-hidden="true" />
+            <span class="sr-only">{name}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Reveal>

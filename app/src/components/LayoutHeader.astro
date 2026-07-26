@@ -1,0 +1,18 @@
+---
+import { Menu, type MenuItem } from './Menu';
+import { Socials, type SocialLink } from './Socials';
+
+interface Props {
+  menuItems: MenuItem[];
+  socials: SocialLink[];
+}
+
+const { menuItems, socials } = Astro.props;
+---
+
+<header class="bg-bg/70 sticky top-0 z-20 backdrop-blur-md">
+  <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4 md:px-12">
+    <Socials data={socials} client:visible />
+    <Menu items={menuItems} client:visible />
+  </div>
+</header>
