@@ -41,15 +41,16 @@ Stored in `docs/specs/`. Format: `docs/specs/NNNN-title.md`.
 ## Rules
 
 - Architecture style: functional (pure functions, composition over inheritance, minimal shared mutable state)
-- Folder structure: folder by feature under `app/src` (colocate a feature's Astro page, React islands, and styles)
+- Folder structure: folder by feature under `app/src` (colocate a feature's Astro page, React islands, and styles); carve out: `app/src/components/` is shared UI used across every page/feature, not owned by one, so it sits outside this rule
 - Named exports only, no default exports
 - Accessibility baseline: WCAG AA on ported UI (keyboard nav, focus trap, aria labels, honors `prefers-reduced-motion`)
+- Design system: build all UI to `app/design.md` (character, ported component set, type/spacing, kept vs. dropped libraries); token values live in `app/src/styles/global.css`
 - Conventional commit messages (`feat:`, `fix:`, `chore:`, ...)
 - One consistent error handling pattern across islands and content collection loading
-- Lint/format: ESLint + Prettier (astro-eslint-parser, eslint-plugin-astro, typescript-eslint, prettier-plugin-astro). Chosen here, not yet installed: installed by the `/develop` tooling sub task (scope feature 2)
-- Pre commit gate: lint + format + typecheck must pass. Not yet installed
+- Lint/format: ESLint + Prettier (astro-eslint-parser, eslint-plugin-astro, typescript-eslint, prettier-plugin-astro), installed (scope feature 2)
+- Pre commit gate: lint + format + typecheck, installed (`.githooks/pre-commit`)
 - Testing gate: unit + integration with Vitest + `@testing-library/react` (runner already set up, spec 0001)
-- CI: a basic check workflow (lint, typecheck, test) on push/PR, separate from the existing `.github/workflows/deploy.yml` (build + deploy only). Not yet installed
+- CI: a basic check workflow (lint, typecheck, test) on push/PR, installed (`.github/workflows/ci.yml`), separate from `.github/workflows/deploy.yml` (build + deploy only)
 
 ## Agent skills
 
@@ -79,6 +80,8 @@ MCP servers: claude-in-chrome (connected)
 
 - [app/AGENTS.md](app/AGENTS.md): Astro project specific dev server and documentation notes (create astro default)
 - [app/src/features/blog/AGENTS.md](app/src/features/blog/AGENTS.md): blog content model conventions (content collection, schema, `getPublishedPosts()`, decided URL scheme)
+- [app/src/components/AGENTS.md](app/src/components/AGENTS.md): shared UI component library conventions (island vs. static split, icon registry pattern)
+- [app/src/features/home/AGENTS.md](app/src/features/home/AGENTS.md): home page data shape and component wiring conventions
 
 _Drafted by /audit from the repo, worth a quick human pass. Edit freely: once a line stops matching this draft, later runs treat it as curated and will flag rather than overwrite it._
 
