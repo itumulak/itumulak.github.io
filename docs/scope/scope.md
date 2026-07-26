@@ -10,7 +10,7 @@ A personal portfolio and blog site, ported from an existing React SPA (`~/Projec
 | # | Feature | Phase | Status |
 |---|---------|-------|--------|
 | 1 | Stack & architecture | Foundation | in-progress |
-| 2 | Coding standards & tooling | Foundation | in-progress |
+| 2 | Coding standards & tooling | Foundation | done |
 | 3 | Blog content model | Foundation | planned |
 | 4 | Design system & UI foundation | Foundation | planned |
 | 5 | Local dev to deploy walking skeleton | Skeleton | planned |
@@ -30,6 +30,7 @@ Astro project setup in `app/`, the Docker dev environment (Dockerfile, docker co
 - [x] Decide the stack (spec): [0001](../specs/0001-stack-and-architecture/index.md)
 - [x] Scaffold from the decision: `/develop stack & architecture`
   Code: `app/`, `docker-compose.yml`, `.github/workflows/deploy.yml`
+- [x] Verify it: `/check verify`, `pnpm build` confirmed clean, `docker compose up` confirmed serving at `iantumulak.localhost` through Traefik (HTTP 200). Caught and fixed a real regression: the tooling task's `prepare` script crash looped the container (see commit `a877d6e`). Medium tier: `/test` still required before `done`
 
 ### 2. Coding standards & tooling
 Capture conventions, then install lint, format, and any pre commit checks from the real scaffolded project.
@@ -37,6 +38,7 @@ Capture conventions, then install lint, format, and any pre commit checks from t
 - [x] Capture conventions and tooling choices: `/audit`
 - [x] Install lint, format, pre commit, CI: `/develop tooling`
   Code: `app/eslint.config.js`, `app/.prettierrc.json`, `app/.lintstagedrc.json`, `.githooks/pre-commit`, `.github/workflows/ci.yml`
+- [x] Verify it: `/check verify`, lint/format/typecheck/test confirmed clean, pre commit hook confirmed firing on a real commit, `ci.yml` confirmed green on a real GitHub Actions run (PR #1)
 
 ### 3. Blog content model · needs a decision
 Markdown only content shape for blog posts (Astro content collections): frontmatter fields (title, date, slug, tags, excerpt), and the pagination and routing pattern the listing and article pages both depend on. Sanity is retired, nothing migrated.
