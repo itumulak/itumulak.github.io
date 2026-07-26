@@ -1,0 +1,96 @@
+# 0001. Astro stack and deployment architecture
+
+**Date**: 2026-07-26
+**Status**: Proposed
+
+## Summary
+
+**Astro is a fixed constraint, not a comparison.** The engineer has already decided the site is built in Astro; this spec does not weigh Astro against another site builder, and no future spec should either. Only the interactive component framework running inside Astro (React now, Preact later, see Planned follow up) is open for revisit.
+
+This spec picks the technical foundation for the site: Astro as the site builder, React for the interactive pieces (islands), pnpm and Node 24 as the toolchain, a Docker based local dev setup behind the existing Traefik proxy, and GitHub Pages as the host, built and published by a GitHub Actions workflow. It carries forward the stack already proven in the earlier prototype project (`personal-web-astro`), refreshed to current, patched versions, rather than redesigning from zero. The engineer intends to swap React for Preact later, once the site is built and verified on React, as a separate follow up spec (see Follow up); this spec deliberately ships on the zero risk option first. Styling libraries (Tailwind, MUI, and so on) are a separate decision, spec 0004 (design system and UI foundation), and are not locked here.
+
+## Requirements
+
+Not applicable. This is a decision only spec (architecture mode); it records the chosen stack, not a build plan. The scaffold work that applies this decision is executed by `/develop` under scope feature 1 ("Stack & architecture"), which derives its own steps from `## Proposed stack` below.
+
+## Decision
+
+**Chosen option**: Option 1: Carry forward the validated Astro plus React islands stack, refreshed to current versions
+
+Build the site in Astro (a static site builder that ships plain HTML by default and only sends JavaScript for the specific components marked interactive), use React through Astro's React integration for those interactive components (menu, modals, timeline, animations), and reuse the already working local dev (Docker plus Traefik) and deploy (GitHub Pages) pattern from the prior prototype, with every package version re verified against what is current and patched today rather than copied as is.
+
+**Planned follow up, not part of this spec**: the engineer wants to swap React for Preact (via `preact/compat`) later, once the site is built and verified working on React, through a dedicated follow up spec rather than deciding it now. Building on React first removes the compatibility risk (MUI, framer motion, and the timeline library are only tested against real React) from the initial build; the later Preact spec can then judge that swap against a working, already verified site instead of an unbuilt one. See Follow up.
+
+## Proposed stack
+
+| Layer | Choice | Reason |
+|---|---|---|
+| Site builder | Astro 7.1.3 | Ships zero JavaScript by default and only hydrates the components marked interactive (partial hydration), which is exactly the performance goal in the product scope. Already proven to build and run in the prior prototype. |
+| Interactive component framework | React 19.2.8, via `@astrojs/react` | The site being ported already uses React, MUI, framer motion, and `react-vertical-timeline-component`, all of which assume real React. Reusing React instead of swapping frameworks avoids a full rewrite of every interactive piece, and avoids any compatibility risk during the initial port. A later Preact swap is planned as a follow up, once the site is built and verified (see Follow up). |
+| Component file type | TypeScript throughout: `.tsx` for every React island, `.ts` for shared logic, `.astro` for Astro components (which support TypeScript in their frontmatter natively). No `.jsx` or plain `.js` component files. | Engineer's explicit requirement. The original site's components are plain JavaScript JSX (`.jsx`, untyped); porting each one into a typed `.tsx` file means adding prop types and interfaces as part of the port, not after it, so type errors surface at build time instead of at runtime. |
+| Package manager | pnpm, pinned to an exact version (not `latest`) via the `packageManager` field in `package.json` and enabled through `corepack enable` | Fast, disk efficient installs; already the manager used by the prototype; only requires Node 22 or newer, so it does not force the Node 24 choice below (that choice is made on its own merits). An exact pin (rather than `pnpm@latest`, which the sibling project's Dockerfile uses) keeps installs reproducible across the engineer's machine, the container, and CI. The `packageManager` field is the single source of truth for the version; `Dockerfile.dev` and CI both read it via `corepack enable`, they never hardcode a version separately. |
+| Runtime | Node.js 24 (current Active LTS) | Node 22 exited Active LTS in October 2025 and is now in Maintenance LTS only (patches, no new features); Node 24 is the current Active LTS line. Since pnpm's own floor (22 or newer) is satisfied either way, this is a straightforward "use the actively maintained line" choice, not a forced one. The Node version has one source of truth, `.nvmrc`; `Dockerfile.dev`'s `node:24-alpine` base image and the deploy workflow's `actions/setup-node` step (if used) both match it by convention, not by reading the file, so a future Node bump must update all three together. |
+| Type checking | TypeScript, Astro's built in strict preset | Catches mistakes at build time with no extra setup; the prototype already had this configured and it carries over unchanged; enforces the `.tsx`/`.ts` only rule above (a `.jsx` file would not be type checked at all, defeating the point). |
+| Test runner | Vitest plus `@testing-library/react` and `jsdom`, wired through Astro's `getViteConfig` helper (needed so Vitest shares Astro's Vite config when testing `.astro` files) | Already proven against Astro's React islands in the prototype; matches what `/test` expects for this workflow tier. |
+| Local dev environment | Docker Compose plus the existing Traefik reverse proxy, served at `iantumulak.localhost` | Reuses the working local dev pattern and network from the sibling project so local dev behaves the same way across both. The prototype's compose file has a typo (`ianctumulak.localhost`); this project uses the correct spelling, `iantumulak.localhost`, matching the product scope and the site owner's name. |
+| Hosting and deploy | GitHub Pages, built and published by the official `withastro/action` GitHub Actions workflow, triggered on push to `main` | Matches the product requirement to deploy to GitHub Pages with an automated pipeline; the official Astro action auto detects pnpm from the lockfile, so no extra install scripting is needed. Triggering on `main` matches the engineer's own workflow: every feature builds on its own branch, and only a merge to `main` (done by the engineer, not by `/develop`) should trigger a live redeploy. |
+| Astro build output | `output: 'static'`, `trailingSlash: 'ignore'` | GitHub Pages only serves static files, so static output (Astro's own default) is required, stated explicitly here rather than left implicit. `trailingSlash: 'ignore'` relaxes the Astro dev server's own route matching (it accepts a URL whether or not it has a trailing slash); in production, whether a link like `/page` resolves without a redirect is actually governed by GitHub Pages' own static file serving behavior, not by this setting. This is a dev time convenience, not a production redirect fix. |
+| Content and blog storage | Markdown files, no database | Out of scope for this spec; the exact content shape (frontmatter fields, routing, pagination) is decided in spec 0003 (blog content model). Named here only so the stack table is complete. |
+| Styling | Not decided here | Deliberately deferred to spec 0004 (design system and UI foundation), which decides whether Tailwind, MUI plus Emotion, and framer motion all carry over, get partially dropped, or get replaced. See Follow up. |
+| Observability | None | A personal, static, backend free site with no user accounts and no data collection has nothing to observe at the application layer beyond what GitHub Pages and the browser already report. Revisit only if a feature (for example, page view analytics) is later pulled off the Deferred list in the product scope. |
+
+**Version sourcing**: the versions in the table above (Astro 7.1.3, React 19.2.8, pnpm, TypeScript, Vitest 4, `@astrojs/react`, `@astrojs/check`, `@testing-library/*`, `jsdom`) were re verified against the sibling prototype's real, currently installed `package.json` (`~/Projects/personal/personal-web-astro/app/package.json`), which already carries current, patched versions for this exact stack, rather than re researched from zero. `@astrojs/react`'s major version must match the installed Astro major (Astro 7 needs an `@astrojs/react` release built against it); pin whatever version `pnpm add` resolves against Astro 7.1.3 at scaffold time, don't copy the sibling's pin blind if Astro 7 has moved since.
+
+**Astro project root**: the Astro project (and its `package.json`, `pnpm-lock.yaml`, `astro.config.mjs`) lives in `app/`, not the repo root, matching the Docker section below and `SCOPE.md`'s existing mention of an `app` folder. Every command, path, and CI step below that touches the Astro project assumes this root.
+
+**Naming note**: two different names are in play on purpose. The local project folder (this one) is `personal-web-astro-v2`. The GitHub repository the engineer creates is named `personal-website-astro-v2` (with "site"), a deliberately different name, not a typo. Everything below about the repo, the `base` path, and the deploy URL refers to the GitHub repository name, `personal-website-astro-v2`.
+
+**GitHub repository**: the engineer will create the repository named `personal-website-astro-v2` under GitHub username `itumulak` (confirmed via the `gh` CLI). Since that is not `itumulak.github.io`, this is a GitHub Pages *project* page, so the site serves at `https://itumulak.github.io/personal-website-astro-v2/`, and:
+- `astro.config.mjs` sets `site: 'https://itumulak.github.io'` and `base: '/personal-website-astro-v2'`.
+- Astro only base prefixes what it resolves itself: imported assets (`import someImage from '...'`) and reads of `import.meta.env.BASE_URL`. It does **not** rewrite a hand written `<a href="/blog">`; that link ships literally and breaks under the `/personal-website-astro-v2` base. Every hand written internal link and non imported asset path must go through a small shared helper (for example `withBase(path: string)`, prepending `import.meta.env.BASE_URL`) rather than a bare absolute path, or links will break once the site is live. This helper is a required build task for the scaffold, not optional polish.
+- Once the repository exists, its Settings, Pages, Build and deployment, Source must be set to "GitHub Actions" manually (a one time repo setting the workflow cannot set for itself).
+
+**Local dev, Docker and Traefik (concrete values, adapted from the sibling project's working setup, not copied verbatim)**:
+- `app/Dockerfile.dev`: base image `node:24-alpine`, runs `corepack enable` (reading the pinned version from `package.json`'s `packageManager` field, not `corepack prepare pnpm@latest`), exposes port `4321`, runs `pnpm install && pnpm exec astro dev --host 0.0.0.0`.
+- `astro.config.mjs` sets `vite.server.allowedHosts: ['iantumulak.localhost']` (Vite's dev server rejects requests whose `Host` header isn't in its allowlist or a plain IP; without this, Traefik proxying `iantumulak.localhost` to the container gets rejected). If hot module reload breaks through the proxy, also set `vite.server.hmr.clientPort` to the externally exposed port.
+- `docker-compose.yml` at the repo root: one service, `app`, built from `app/Dockerfile.dev`; container name `personal-website-astro-v2-app`; mounts `./app:/app` plus an anonymous volume on `/app/node_modules` (so host edits hot reload, and the container's own `node_modules`, install target `linux/node24`, isn't clobbered by the host's); joins two networks, a project local bridge network (`personal-website-astro-v2-network`) and the pre existing external `local_proxy` network (the shared Traefik network already used by the sibling project); Traefik labels route `Host(\`iantumulak.localhost\`)` on the `web` entrypoint to the container's port `4321`. Router and service label names must be project specific (for example `traefik.http.routers.personal-website-astro-v2.*`), not copied from the sibling project's labels verbatim, since both projects share the same `local_proxy` network and identical label names would collide when both run at once.
+- This adapts the sibling project's compose file (corrected domain, project specific container/network/label names, added volumes, corepack pin) rather than mirroring it byte for byte; the sibling's own compose file is missing the two volume mounts above, which is a gap there too, not a pattern worth reusing.
+
+**GitHub Actions deploy workflow (concrete values)**:
+- Trigger: `on: push: branches: [main]` (matches the engineer's own workflow: feature branches merge to `main` manually, and only that merge should redeploy).
+- Two jobs, per GitHub's official Pages pattern: a `build` job using `withastro/action@v6` with `path: ./app` (the Astro project root, see above; the action auto detects pnpm from `app/pnpm-lock.yaml`), and a separate `deploy` job that `needs: build` and runs `actions/deploy-pages@v4` with `environment: { name: github-pages, url: ${{ steps.deployment.outputs.page_url }} }`. `withastro/action` only builds and uploads the Pages artifact; it does not publish, so the `deploy-pages` job is required, not optional, or the workflow succeeds without ever updating the live site.
+- Requires `permissions: { contents: read, pages: write, id-token: write }` (top level or per job) and a `concurrency` group (for example `group: "pages"`, `cancel-in-progress: false`) on the deploy job; all three permissions and the concurrency group are mandated by GitHub's official Pages deploy action, not optional.
+- No separate build check workflow on branches or pull requests is in scope for this spec; a broken build is only caught by the `main` deploy failing. Given this spec's decision to carry no observability layer, this is the one place a silent break could reach production; if that risk is unacceptable, add a lightweight "build only, don't deploy" workflow on pull requests as a fast follow (see Follow up).
+
+## Consequences
+
+**Positive**:
+- Reuses a stack that is already proven to build and run (the prototype's scaffold works today), so this project starts from a working baseline instead of an untested one.
+- Every package is verified current and patched as of 2026-07-26, directly matching the engineer's stated priority on security and patches.
+- Partial hydration (Astro plus islands) keeps shipped JavaScript to only what the interactive components need, supporting the product's stated performance and SEO goals.
+- Local dev matches the sibling project's Docker plus Traefik pattern, so the engineer does not have to learn a second workflow.
+- Zero framework compatibility risk during the initial port: every ported component (MUI, framer motion, the timeline library) runs on the exact framework it was built and tested against.
+- Every component is typed (`.tsx`/`.ts`) from the start, catching prop and data mistakes at build time instead of at runtime, which plain `.jsx` (what the original site uses) cannot do.
+
+**Negative / tradeoffs**:
+- Porting from `.jsx` to `.tsx` is more than a file rename: every component's props, and any data it receives (for example blog post frontmatter, once spec 0003 defines its shape), need real type annotations, which is extra work per component the original untyped source did not require.
+- React is heavier than a framework built for islands from the start (for example Preact); it is kept for this initial build only, deliberately trading a larger bundle for zero compatibility risk while the site is first being ported and verified. The engineer's planned follow up spec will revisit this once the site works.
+- Node 24 is newer and less battle tested in production than Node 22 was; if a dependency has not yet published Node 24 compatible native bindings, that would surface at `pnpm install` time and need a pin back to Node 22 as a fallback.
+- The `base: '/personal-website-astro-v2'` path adds a small but real class of bug (an absolute link that forgets the base prefix) that a user or org page (served at the domain root) would not have.
+- No observability layer means a broken deploy or a runtime error in an interactive island is only caught by the engineer noticing, not by an alert.
+
+**Neutral**:
+- The domain typo fix (`ianctumulak.localhost` to `iantumulak.localhost`) means the two projects' local dev URLs no longer match, which is expected since they are now separate efforts.
+- `SCOPE.md`'s original mention of "a Dockerfile in the app folder" is read as `Dockerfile.dev` (the file the compose service already references), not a second, separate production Dockerfile. GitHub Pages hosting has no container runtime, so a production Dockerfile would have no consumer; the `/develop` scaffold step should raise this explicitly if it turns out to be wrong.
+
+## Follow-up
+
+- [ ] Design system and UI foundation (spec 0004) must decide whether Tailwind, MUI plus Emotion, and framer motion all carry over as is, get partially dropped, or get replaced. Whether they can cleanly coexist is NOT proven here, only asserted as plausible: MUI's Emotion cache has an `enableCssLayer` option that can place its generated styles inside their own CSS layer, which in principle keeps cascade order predictable against Tailwind's utility classes, but this needs a real spike (one island built with both) before spec 0004 relies on it.
+- [ ] If a dependency lacks Node 24 native bindings when `pnpm install` first runs against the real scaffold, fall back to Node 22 (still functional, just no longer Active LTS) and note the exception here.
+- [ ] Once the site is built on React and verified working (`/check verify` passing), the engineer intends to run `/architect` again for a dedicated spec on swapping React for Preact (via `preact/compat`) to reduce shipped JavaScript. That later spec should judge the swap against the real, working components rather than a hypothetical, and should reuse the compatibility risk analysis already recorded in this spec's rationale (Option 2, rejected here only for sequencing, not on merit).
+- [ ] Consider adding a "build only, don't deploy" GitHub Actions workflow on pull requests, so a broken build is caught before merge instead of only at the `main` deploy (see the deploy workflow note above; this spec deliberately left it out of the initial scope).
+- [ ] Lint and format tooling (ESLint/Biome, Prettier, any pre commit checks) is deliberately not decided here; it belongs to scope feature 2 ("Coding standards & tooling"), which captures conventions from the real scaffolded project via `/audit` after this feature's scaffold lands.
+
+## Rationale
+
+Reasoning, the options weighed, and the sources behind each pick: see [rationale.md](rationale.md).

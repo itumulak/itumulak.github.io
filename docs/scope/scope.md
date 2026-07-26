@@ -1,0 +1,126 @@
+# Scope: iantumulak personal site (Astro port)
+
+A personal portfolio and blog site, ported from an existing React SPA (`~/Projects/personal/iantumulak-website`) into Astro, for the site owner and its visitors and blog readers.
+
+**Build approach:** Tracer Bullet (prove the whole pipe, local dev through build through deploy, connects end to end before any single page is built out in full).
+**Workflow:** Lean (the tail after develop: `/check verify` on the real app; no separate test suite or fresh model review by default). Architect still gates any feature that needs a decision at every tier; two foundations below are tagged `Medium` (adds `/test`) since they are the costliest to redo.
+
+## At a glance
+
+| # | Feature | Phase | Status |
+|---|---------|-------|--------|
+| 1 | Stack & architecture | Foundation | in-progress |
+| 2 | Coding standards & tooling | Foundation | planned |
+| 3 | Blog content model | Foundation | planned |
+| 4 | Design system & UI foundation | Foundation | planned |
+| 5 | Local dev to deploy walking skeleton | Skeleton | planned |
+| 6 | Home page port | Slice 2 | planned |
+| 7 | Blog section on home page | Slice 3 | planned |
+| 8 | Blog listing page | Slice 3 | planned |
+| 9 | Single article page | Slice 4 | planned |
+| 10 | Disqus comments | Slice 5 | planned |
+| 11 | SEO optimization pass | Slice 6 | planned |
+| 12 | Cookie consent banner | Slice 7 | planned |
+
+## Foundations
+
+### 1. Stack & architecture · Medium
+Astro project setup in `app/`, the Docker dev environment (Dockerfile, docker compose copied from `~/Projects/personal/personal-web-astro` and its Traefik proxy network, served at `iantumulak.localhost`), and the GitHub Pages deploy path (base path, GitHub Actions build and publish).
+**Done when:** the stack and dev/deploy setup are recorded in a spec, `docker compose up` serves the app at `iantumulak.localhost` through the existing proxy, and the empty scaffold builds.
+- [x] Decide the stack (spec): [0001](../specs/0001-stack-and-architecture/index.md)
+- [ ] Scaffold from the decision: `/develop stack & architecture`
+
+### 2. Coding standards & tooling
+Capture conventions, then install lint, format, and any pre commit checks from the real scaffolded project.
+**Done when:** root `AGENTS.md` reflects the real stack, and lint and format run clean.
+- [ ] Capture conventions and tooling choices: `/audit`
+
+### 3. Blog content model · needs a decision
+Markdown only content shape for blog posts (Astro content collections): frontmatter fields (title, date, slug, tags, excerpt), and the pagination and routing pattern the listing and article pages both depend on. Sanity is retired, nothing migrated.
+**Done when:** a sample markdown post validates against the schema and produces the fields later pages need, with no database involved.
+- [ ] Design it (spec): `/architect blog content model`
+
+### 4. Design system & UI foundation · needs a decision · Medium
+How the existing site's visual language and components (Menu, Avatar, Headline, Timeline, Card, Socials, Pill, Modal, Reveal, Tags) port into Astro: which of Tailwind, MUI, styled components, and Framer Motion carry over versus get replaced by lighter equivalents, base layout, and responsive breakpoints. This decision also carries the performance and accessibility goals (partial hydration, minimal shipped JS).
+**Done when:** `design.md` covers the ported component set, type and spacing, and states which original libraries are kept versus dropped and why.
+- [ ] Design it (spec): `/architect design system & UI foundation`
+
+## Skeleton
+
+### 5. Local dev to deploy walking skeleton
+The thinnest real thread through every layer: Astro scaffold renders one placeholder page, `docker compose up` serves it locally at `iantumulak.localhost`, and a GitHub Actions workflow builds and publishes it live on GitHub Pages. Proves the pipe connects before any real page is built.
+**Done when:** a change pushed to the branch is visible on the live GitHub Pages URL, and local dev via the Docker proxy reflects edits live.
+- [ ] Build it: `/develop local dev to deploy walking skeleton`
+
+## Slice 2: Home page port
+
+### 6. Home page port
+Full port of the existing single page site (menu, hero/avatar, headline, experience timeline, project cards, socials) into Astro using the design system, matching current content and functionality.
+**Done when:** every section from the existing site renders with the same content, is fully responsive across mobile, tablet, and desktop, and matches existing functionality (menu navigation, modal, reveal animations).
+- [ ] Build it: `/develop home page port`
+
+## Slice 3: Blog listing
+
+### 7. Blog section on home page
+A recent articles preview list on the home page, pulled from the markdown content collection.
+**Done when:** the home page shows the N most recent posts (title, date, excerpt) linking to their article pages, and renders an empty state gracefully if there are no posts yet.
+- [ ] Build it: `/develop blog section on home page`
+
+### 8. Blog listing page
+A dedicated page listing all articles with pagination.
+**Done when:** all posts are listed newest first, paginated per the content model's routing pattern, and each page of results is directly linkable.
+- [ ] Build it: `/develop blog listing page`
+
+## Slice 4: Single article page
+
+### 9. Single article page
+A page that renders the full content of one selected markdown article.
+**Done when:** a post's slug route renders its full markdown content with the design system's typography, and a bad or missing slug renders a not found state.
+- [ ] Build it: `/develop single article page`
+
+## Slice 5: Disqus comments
+
+### 10. Disqus comments
+Disqus comment thread embedded on the article page, gated behind cookie consent.
+**Done when:** a comment thread loads on each article page, scoped to that article's identity, and does not load until cookie consent is accepted.
+- [ ] Build it: `/develop disqus comments`
+
+## Slice 6: SEO
+
+### 11. SEO optimization pass
+Meta tags, sitemap, robots.txt, Open Graph and social card tags, and structured data for articles, across the pages built so far.
+**Done when:** every page has correct title and meta description, a sitemap and robots.txt are published, article pages carry Open Graph tags and article structured data, and links preview correctly when shared.
+- [ ] Build it: `/develop seo optimization pass`
+
+## Slice 7: Cookie consent
+
+### 12. Cookie consent banner
+A consent banner gating Disqus (and any future analytics) until the visitor accepts, with the choice persisted.
+**Done when:** a first time visitor sees the banner, declining keeps Disqus from loading, accepting persists the choice and does not re-prompt.
+- [ ] Build it: `/develop cookie consent banner`
+
+## Deferred
+Out of scope for the current build pass, kept so the plan stays honest.
+- **Analytics or error monitoring**: page view analytics or production error tracking · needs a decision
+- **React to Preact swap**: replace React with Preact (via `preact/compat`) for the interactive islands, once the site is built and verified on React · needs a decision · from spec [0001](../specs/0001-stack-and-architecture/index.md)
+
+## Legend
+
+**The decision box.** Every feature carries exactly one, the sub-task whose label ends with `(spec)`. Its wording varies, so skills locate it by that `(spec)` suffix, never by an exact label. Every other box is an execution box and `/architect` never ticks one.
+
+**Feature lifecycle**: the scope updates as a feature moves; each row is what it shows and who sets it:
+
+| State | Set by | The feature shows |
+|---|---|---|
+| `planned` · needs a decision | `/scope` | one box: `Design it (spec): /architect <feature>` |
+| `in-progress` (designed) | `/architect` at spec capture | `Design it` ticked; spec linked; `Build it: /develop <feature>` plus 2 to 5 milestones rolled up from the spec; `Verify it` box; any surfaced follow up enrolled |
+| `in-progress` (building) | `/develop` | milestone sub boxes tick one by one; code pointer filled |
+| `in-progress` (verified) | `/check verify` | `Build it` plus milestones ticked; `Verify it` ticked |
+| `done` | the tier's last required stage (`Lean` here, so `/check verify`), then `/sync` | the tier's required boxes ticked; `/sync` captures the slice's conventions into `AGENTS.md` |
+
+- **Next step** = the first unticked box (always a command or a tracked milestone).
+- **needs a decision** = run `/architect` first; otherwise straight to `/develop` (or `/audit` for standards and tooling). The tag drops once the spec is captured.
+- **Atomic build tasks live in the spec's `## Build plan`, not here**: the scope carries only the milestone rollup.
+- **Status** `planned` then `in-progress` then `done`, plus `existing` (pre workflow) and `dropped` (de scoped, kept for history).
+- **Workflow tier tag** beside a heading (here, `· Medium` on two foundations) overrides the project default `Lean` tier for that one feature; no tag means inherit.
+- **Workflow** (header line) is the project default tier: `Lean` runs `/check verify` after `/develop`, and that is what closes a feature to `done`. A feature's own tier tag overrides this default.
