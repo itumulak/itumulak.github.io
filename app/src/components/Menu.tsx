@@ -5,6 +5,7 @@ export interface MenuItem {
   label: string;
   href: string;
   external?: boolean;
+  emphasized?: boolean;
 }
 
 export interface MenuProps {
@@ -91,7 +92,11 @@ export function Menu({ items }: MenuProps) {
               href={item.href}
               target={item.external ? '_blank' : undefined}
               rel={item.external ? 'noreferrer' : undefined}
-              className="text-text hover:text-brand transition-colors"
+              className={
+                item.emphasized
+                  ? 'text-brand border-brand hover:bg-brand hover:text-bg rounded border-2 px-4 py-2 transition-colors'
+                  : 'text-text hover:text-brand transition-colors'
+              }
             >
               {item.label}
             </a>
@@ -140,7 +145,11 @@ export function Menu({ items }: MenuProps) {
                 target={item.external ? '_blank' : undefined}
                 rel={item.external ? 'noreferrer' : undefined}
                 onClick={closeMenu}
-                className="text-text hover:text-brand text-lg transition-colors"
+                className={
+                  item.emphasized
+                    ? 'text-brand border-brand mt-4 self-start rounded border-2 px-4 py-2 text-lg transition-colors'
+                    : 'text-text hover:text-brand text-lg transition-colors'
+                }
               >
                 {item.label}
               </a>

@@ -40,8 +40,12 @@ const linkedin = 'https://www.linkedin.com/in/itumulak/';
 
   <main>
     <Section id="home">
-      <div class="relative z-10 flex w-full flex-col gap-y-6 lg:w-fit">
-        <Avatar src={meImg} name="Ian Tumulak" />
+      <div class="relative z-10 flex w-full flex-col gap-y-6">
+        <div
+          class="flex w-full justify-center lg:absolute lg:-top-10 lg:right-20 lg:w-max lg:justify-end"
+        >
+          <Avatar src={meImg} name="Ian Tumulak" />
+        </div>
         <Reveal client:visible={{ rootMargin: '200px' }}>
           <h1 class="mx-auto w-fit text-6xl font-black lg:mx-0 lg:text-8xl">
             Hi, I'm Ian<span class="text-brand">.</span>
@@ -66,16 +70,19 @@ const linkedin = 'https://www.linkedin.com/in/itumulak/';
           </Reveal>
           <Reveal client:visible={{ rootMargin: '200px' }}>
             <p>
-              I have been a programmer for almost 15 years now. I started as a WordPress developer
-              but expanded into React, Next.js, and developing enterprise wordpress applications.
-              Recently I am into Go lang for creating backend solutions.
+              I have been in the industry since 2010. Over my entire career, I have worked on a wide
+              range of projects, from small-scale WordPress sites to <strong
+                >large-scale enterprise projects</strong
+              >. While I mostly worked on Wordpress my entire career, I never shy away from new
+              challenges and opportunities.
             </p>
           </Reveal>
           <Reveal client:visible={{ rootMargin: '200px' }}>
             <p>
               I am actively looking for new positions where I can help <strong
                 >build awesome things</strong
-              >.<br /> If you think you've got an opening for me, feel free to reach out.
+              > and contribute my knowledge. If you think you've got an opening for me, feel free to reach
+              out.
             </p>
           </Reveal>
         </Container>
@@ -106,7 +113,9 @@ const linkedin = 'https://www.linkedin.com/in/itumulak/';
     </Section>
 
     <Section id="contact">
-      <Headline text="Contact" />
+      <h2 class="text-text text-center text-7xl font-black">
+        Contact<span class="text-brand">.</span>
+      </h2>
       <div class="flex flex-col items-center gap-6">
         <Reveal client:visible={{ rootMargin: '200px' }}>
           <p class="text-center text-lg font-extralight">

@@ -46,7 +46,7 @@ export const menuItems: MenuItem[] = [
   { label: 'Projects', href: '/#projects' },
   { label: 'Experience', href: '/#experience' },
   { label: 'Contact', href: '/#contact' },
-  { label: 'Resume', href: '/resume.pdf', external: true },
+  { label: 'Resume', href: '/resume.pdf', external: true, emphasized: true },
 ];
 
 export const socials: SocialLink[] = [
@@ -182,7 +182,7 @@ export const experience: ExperienceEntry[] = [
     title: 'Lead Developer',
     dateRange: 'Jan 2025 - Present',
     description:
-      'I lead a small team of developers. I handle both internal and client facing projects. My key responsibilities includes: Leading multiple full-cycle development projects, provide mentoring and guidance to junior developers, conducting research, feasibility studies by defining project requirements and scopes, take a hands-on role as a Senior Full Stack Developer.',
+      'I lead a team of 4 developers. I handle both internal and client facing projects. My key responsibilities includes: Leading multiple full-cycle development projects, provide mentoring and guidance to junior developers, conducting research, feasibility studies by defining project requirements and scopes, take a hands-on role as a Senior Full Stack Developer.',
     workLabel: 'Associated Work',
     pills: [
       { name: 'TMT Insurance', url: 'https://www.tmtinsurance.com/' },

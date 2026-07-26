@@ -17,7 +17,7 @@ export interface TimelineProps {
 
 export function Timeline({ experience }: TimelineProps) {
   return (
-    <VerticalTimeline lineColor="var(--color-light-dark)">
+    <VerticalTimeline animate={false} layout="1-column-left" lineColor="var(--color-light-dark)">
       {experience.map((entry) => {
         const Icon = ICONS[entry.icon ?? 'briefcase'];
         return (
@@ -30,8 +30,8 @@ export function Timeline({ experience }: TimelineProps) {
             iconStyle={{ background: 'var(--color-brand)', color: 'var(--color-bg)' }}
             icon={<Icon />}
           >
-            <h3 className="text-text text-lg font-bold">{entry.position}</h3>
-            <h4 className="text-brand font-semibold">{entry.title}</h4>
+            <h3 className="text-brand text-lg font-bold">{entry.position}</h3>
+            <h4 className="text-text font-semibold">{entry.title}</h4>
             <p className="text-text/80 mt-2">{entry.description}</p>
             {entry.workLabel && entry.pills && entry.pills.length > 0 && (
               <div className="mt-3 flex flex-col gap-y-2">

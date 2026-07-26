@@ -1,10 +1,14 @@
 # Verify: home page port · updated 2026-07-26
 
-_Steps derived from the scope's "Done when" criteria (feature 6 has no governing spec)._
+_Steps derived from the scope's "Done when" criteria (feature 6 has no governing spec). Reference for content parity is the live production site (iantumulak-website.vercel.app), not the local legacy clone — that clone had uncommitted draft edits that diverge from what's actually deployed._
 
 ## UI / manual
 
 - [ ] Visit `/` at desktop width (1440px) → hero (avatar + "Hi, I'm Ian." + "I build awesome things."), About me (3 bio paragraphs + Tech Stack tag groups), Passion Projects (4 cards with images/links/stacks), Experience (7 timeline entries newest first), Contact (blurb + mailto link) all render with the same content as the legacy site → Done-when: "every section... renders with the same content"
+- [ ] At desktop width, hero avatar sits beside the "Hi, I'm Ian." heading (top-right, absolutely positioned), not stacked above it; at mobile width it's centered above the heading
+- [ ] Experience timeline is a single left-aligned column (not an alternating two-column zigzag); each entry's company name renders in brand green, role in plain white
+- [ ] Menu's "Resume" item (desktop bar and mobile drawer) renders as a bordered brand-green pill, distinct from the plain text links
+- [ ] Contact heading is a large centered "Contact." (not the left-aligned accent-bar `Headline` style used by the other sections)
 - [ ] Resize to tablet (768px) and mobile (390px) width → sections reflow to single column, text remains readable, no horizontal overflow or clipped content → Done-when: "fully responsive across mobile, tablet, and desktop"
 - [ ] At mobile width, click the hamburger toggle → drawer opens covering the full viewport height (not clipped to the header bar), `aria-expanded` flips to `true`, focus moves to the first link → Done-when: "matches existing functionality (menu navigation)"
 - [ ] With the drawer open, press `Tab`/`Shift+Tab` repeatedly → focus cycles only among the drawer's links, never escaping to page content behind it (focus trap)
