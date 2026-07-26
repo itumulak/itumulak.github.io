@@ -13,7 +13,7 @@ A personal portfolio and blog site, ported from an existing React SPA (`~/Projec
 | 2 | Coding standards & tooling | Foundation | done |
 | 3 | Blog content model | Foundation | done |
 | 4 | Design system & UI foundation | Foundation | done |
-| 5 | Local dev to deploy walking skeleton | Skeleton | in-progress |
+| 5 | Local dev to deploy walking skeleton | Skeleton | done |
 | 6 | Home page port | Slice 2 | done |
 | 7 | Blog section on home page | Slice 3 | planned |
 | 8 | Blog listing page | Slice 3 | planned |
@@ -72,6 +72,7 @@ The thinnest real thread through every layer: Astro scaffold renders one placeho
 **Done when:** a change pushed to the branch is visible on the live GitHub Pages URL, and local dev via the Docker proxy reflects edits live.
 - [x] Build it: `/develop local dev to deploy walking skeleton`
   Local dev leg: `docker compose up`, `iantumulak.localhost` returns 200 through Traefik. Deploy leg: repo made public by the engineer; GitHub Pages then needed a one time enable (`gh api repos/itumulak/itumulak.github.io/pages -X POST -f build_type=workflow`, source: GitHub Actions) since the workflow can't enable it itself. Re-ran the `Deploy to GitHub Pages` run, both `build` and `deploy` jobs green, `https://itumulak.github.io/` confirmed live (200, real home page content present).
+- [x] Verify it: `/check verify`, both Done-when behaviors reproduced live: a trivial edit to `index.astro` appeared through `iantumulak.localhost` within seconds with no container restart (then reverted, confirmed gone); `https://itumulak.github.io/` returns 200 with current content, latest `Deploy to GitHub Pages` run green.
 
 ## Slice 2: Home page port
 
