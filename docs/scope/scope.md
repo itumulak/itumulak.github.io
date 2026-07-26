@@ -12,7 +12,7 @@ A personal portfolio and blog site, ported from an existing React SPA (`~/Projec
 | 1 | Stack & architecture | Foundation | in-progress |
 | 2 | Coding standards & tooling | Foundation | done |
 | 3 | Blog content model | Foundation | done |
-| 4 | Design system & UI foundation | Foundation | planned |
+| 4 | Design system & UI foundation | Foundation | in-progress |
 | 5 | Local dev to deploy walking skeleton | Skeleton | planned |
 | 6 | Home page port | Slice 2 | planned |
 | 7 | Blog section on home page | Slice 3 | planned |
@@ -53,10 +53,10 @@ Markdown/MDX content shape for blog posts (Astro content collections): frontmatt
 - [x] Verify it: `/check verify`, all six acceptance criteria confirmed against the real build and a running dev server (schema validation, draft filtering dev vs prod, sort with stable tiebreak, empty collection, filename uniqueness); see spec 0002 for the checklist
 - [x] Test it: `/test`, `getPublishedPosts()` covered via a mocked `astro:content` (draft filter, sort tiebreak, empty collection); `blogSchema` already covered
 
-### 4. Design system & UI foundation · needs a decision · Medium
+### 4. Design system & UI foundation · Medium
 How the existing site's visual language and components (Menu, Avatar, Headline, Timeline, Card, Socials, Pill, Modal, Reveal, Tags) port into Astro: which of Tailwind, MUI, styled components, and Framer Motion carry over versus get replaced by lighter equivalents, base layout, and responsive breakpoints. This decision also carries the performance and accessibility goals (partial hydration, minimal shipped JS).
 **Done when:** `design.md` covers the ported component set, type and spacing, and states which original libraries are kept versus dropped and why.
-- [ ] Design it (spec): `/architect design system & UI foundation`
+- [x] Design it (spec): [0003](../specs/0003-design-system-ui-foundation/index.md)
 
 ## Skeleton
 
