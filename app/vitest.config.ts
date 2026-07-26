@@ -6,5 +6,6 @@ export default getViteConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
+    passWithNoTests: true,
   },
 });

@@ -37,5 +37,16 @@ Thumbs.db
 .rtk/
 .tokensave/
 
+# Agent Skills: regenerate via `npx skills experimental_install` from skills-lock.json (tracked)
+.claude/skills/
+.agents/
+
+# Claude Code local settings (per developer, never shared)
+.claude/settings.local.json
+
+# Test coverage output
+coverage/
+app/coverage/
+
 # Docker local overrides
 docker-compose.override.yml

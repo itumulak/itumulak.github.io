@@ -10,7 +10,7 @@ A personal portfolio and blog site, ported from an existing React SPA (`~/Projec
 | # | Feature | Phase | Status |
 |---|---------|-------|--------|
 | 1 | Stack & architecture | Foundation | in-progress |
-| 2 | Coding standards & tooling | Foundation | planned |
+| 2 | Coding standards & tooling | Foundation | in-progress |
 | 3 | Blog content model | Foundation | planned |
 | 4 | Design system & UI foundation | Foundation | planned |
 | 5 | Local dev to deploy walking skeleton | Skeleton | planned |
@@ -34,7 +34,9 @@ Astro project setup in `app/`, the Docker dev environment (Dockerfile, docker co
 ### 2. Coding standards & tooling
 Capture conventions, then install lint, format, and any pre commit checks from the real scaffolded project.
 **Done when:** root `AGENTS.md` reflects the real stack, and lint and format run clean.
-- [ ] Capture conventions and tooling choices: `/audit`
+- [x] Capture conventions and tooling choices: `/audit`
+- [x] Install lint, format, pre commit, CI: `/develop tooling`
+  Code: `app/eslint.config.js`, `app/.prettierrc.json`, `app/.lintstagedrc.json`, `.githooks/pre-commit`, `.github/workflows/ci.yml`
 
 ### 3. Blog content model · needs a decision
 Markdown only content shape for blog posts (Astro content collections): frontmatter fields (title, date, slug, tags, excerpt), and the pagination and routing pattern the listing and article pages both depend on. Sanity is retired, nothing migrated.
