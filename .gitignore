@@ -44,6 +44,9 @@ Thumbs.db
 # Claude Code local settings (per developer, never shared)
 .claude/settings.local.json
 
+# Headroom (local tool state, machine specific)
+.claude/.headroom_wrap_marker.json
+
 # Test coverage output
 coverage/
 app/coverage/

@@ -17,7 +17,7 @@ A personal portfolio and blog site, ported from an existing React SPA (`~/Projec
 | 6 | Home page port | Slice 2 | done |
 | 7 | Blog section on home page | Slice 3 | done |
 | 8 | Blog listing page | Slice 3 | planned |
-| 9 | Single article page | Slice 4 | planned |
+| 9 | Single article page | Slice 4 | done |
 | 10 | Disqus comments | Slice 5 | planned |
 | 11 | SEO optimization pass | Slice 6 | planned |
 | 12 | Cookie consent banner | Slice 7 | planned |
@@ -103,7 +103,16 @@ A dedicated page listing all articles with pagination.
 ### 9. Single article page
 A page that renders the full content of one selected markdown article.
 **Done when:** a post's slug route renders its full markdown content with the design system's typography, and a bad or missing slug renders a not found state.
-- [ ] Build it: `/develop single article page`
+- [x] Design it (spec): [0004](../specs/0004-single-article-page.md)
+- [x] Build it: `/develop single article page`
+  - [x] Article route + base render: `/blog/[slug]/`, header, back link, title, date, body, satisfies AC-1, AC-7, AC-8
+  - [x] Site not found page: `src/pages/404.astro`, satisfies AC-2, AC-3
+  - [x] Tag chip display, satisfies AC-4
+  - [x] Code fence syntax highlighting (Shiki, github-dark), satisfies AC-5
+  - [x] MDX inline image handling, satisfies AC-6
+  - Code: `app/src/pages/blog/[slug].astro`, `app/src/pages/404.astro`, `app/src/features/blog/TagChip.astro`, `app/astro.config.mjs`
+- [x] Verify it: `/check verify single article page`
+- [x] Test it: `/test single article page`
 
 ## Slice 5: Disqus comments
 

@@ -5,4 +5,15 @@ excerpt: 'The first post in the new blog content model, proving the schema end t
 tags: ['meta']
 ---
 
+import { Image } from 'astro:assets';
+import meImg from '../../assets/me.jpg';
+
 This is a sample post confirming the blog content model (spec 0002): a markdown/MDX file with valid frontmatter, read through the `blog` content collection and its Zod schema.
+
+<Image src={meImg} alt="Ian Tumulak" width={480} />
+
+This post also proves the single article page (spec 0004) can render an MDX inline image via Astro's own image optimizer, and a fenced code block with syntax highlighting:
+
+```ts
+export const hello = 'world';
+```

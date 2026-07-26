@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+import Headline from '../components/Headline.astro';
+import { withBase } from '../lib/withBase';
+---
+
+<Layout
+  title="Post not found — Ian Tumulak"
+  description="The page you're looking for doesn't exist."
+>
+  <main>
+    <Section>
+      <div class="flex min-h-[60vh] flex-col items-center justify-center gap-y-6 text-center">
+        <h1><Headline text="Post not found" /></h1>
+        <p class="text-text/80 max-w-md font-extralight">
+          The page you're looking for doesn't exist, or may have moved.
+        </p>
+        <a
+          href={withBase('/')}
+          class="bg-brand-dark text-text hover:bg-brand hover:text-bg inline-block rounded px-4 py-2 text-sm font-semibold transition-colors"
+        >
+          Back to home
+        </a>
+      </div>
+    </Section>
+  </main>
+</Layout>
