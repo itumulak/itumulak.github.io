@@ -28,7 +28,8 @@ A personal portfolio and blog site, ported from an existing React SPA (`~/Projec
 Astro project setup in `app/`, the Docker dev environment (Dockerfile, docker compose copied from `~/Projects/personal/personal-web-astro` and its Traefik proxy network, served at `iantumulak.localhost`), and the GitHub Pages deploy path (base path, GitHub Actions build and publish).
 **Done when:** the stack and dev/deploy setup are recorded in a spec, `docker compose up` serves the app at `iantumulak.localhost` through the existing proxy, and the empty scaffold builds.
 - [x] Decide the stack (spec): [0001](../specs/0001-stack-and-architecture/index.md)
-- [ ] Scaffold from the decision: `/develop stack & architecture`
+- [x] Scaffold from the decision: `/develop stack & architecture`
+  Code: `app/`, `docker-compose.yml`, `.github/workflows/deploy.yml`
 
 ### 2. Coding standards & tooling
 Capture conventions, then install lint, format, and any pre commit checks from the real scaffolded project.

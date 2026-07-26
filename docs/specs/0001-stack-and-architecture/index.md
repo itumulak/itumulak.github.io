@@ -1,7 +1,7 @@
 # 0001. Astro stack and deployment architecture
 
 **Date**: 2026-07-26
-**Status**: Proposed
+**Status**: In Progress
 
 ## Summary
 

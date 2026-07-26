@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile.dev
+    container_name: personal-website-astro-v2-app
+    environment:
+      HOST: 0.0.0.0
+      PORT: 4321
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+    networks:
+      - personal-website-astro-v2-network
+      - local_proxy
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.personal-website-astro-v2.entrypoints=web"
+      - "traefik.http.routers.personal-website-astro-v2.rule=Host(`iantumulak.localhost`)"
+      - "traefik.http.services.personal-website-astro-v2.loadbalancer.server.port=4321"
+
+networks:
+  personal-website-astro-v2-network:
+    driver: bridge
+  local_proxy:
+    external: true
