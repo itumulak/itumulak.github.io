@@ -51,7 +51,7 @@ Markdown/MDX content shape for blog posts (Astro content collections): frontmatt
   - [x] Record `PAGE_SIZE` and the three route patterns for later features to build against, satisfies AC-6
   Code: `app/src/content.config.ts`, `app/src/features/blog/`, `app/src/content/blog/`
 - [x] Verify it: `/check verify`, all six acceptance criteria confirmed against the real build and a running dev server (schema validation, draft filtering dev vs prod, sort with stable tiebreak, empty collection, filename uniqueness); see spec 0002 for the checklist
-- [ ] Test it: `/test`
+- [x] Test it: `/test`, `getPublishedPosts()` covered via a mocked `astro:content` (draft filter, sort tiebreak, empty collection); `blogSchema` already covered
 
 ### 4. Design system & UI foundation · needs a decision · Medium
 How the existing site's visual language and components (Menu, Avatar, Headline, Timeline, Card, Socials, Pill, Modal, Reveal, Tags) port into Astro: which of Tailwind, MUI, styled components, and Framer Motion carry over versus get replaced by lighter equivalents, base layout, and responsive breakpoints. This decision also carries the performance and accessibility goals (partial hydration, minimal shipped JS).
