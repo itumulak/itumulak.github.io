@@ -70,8 +70,8 @@ How the existing site's visual language and components (Menu, Avatar, Headline, 
 ### 5. Local dev to deploy walking skeleton
 The thinnest real thread through every layer: Astro scaffold renders one placeholder page, `docker compose up` serves it locally at `iantumulak.localhost`, and a GitHub Actions workflow builds and publishes it live on GitHub Pages. Proves the pipe connects before any real page is built.
 **Done when:** a change pushed to the branch is visible on the live GitHub Pages URL, and local dev via the Docker proxy reflects edits live.
-- [ ] Build it: `/develop local dev to deploy walking skeleton`
-  Local dev leg proven: `docker compose up`, `iantumulak.localhost` returns 200 through Traefik. Deploy leg blocked: repo (`itumulak/itumulak.github.io`) is private, GitHub Pages needs a public repo or a paid plan; engineer chose to skip this leg for now. Resume by making the repo public (or confirming a paid plan), then push to `main` and confirm the live URL serves the page.
+- [x] Build it: `/develop local dev to deploy walking skeleton`
+  Local dev leg: `docker compose up`, `iantumulak.localhost` returns 200 through Traefik. Deploy leg: repo made public by the engineer; GitHub Pages then needed a one time enable (`gh api repos/itumulak/itumulak.github.io/pages -X POST -f build_type=workflow`, source: GitHub Actions) since the workflow can't enable it itself. Re-ran the `Deploy to GitHub Pages` run, both `build` and `deploy` jobs green, `https://itumulak.github.io/` confirmed live (200, real home page content present).
 
 ## Slice 2: Home page port
 
