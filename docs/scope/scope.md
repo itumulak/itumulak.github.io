@@ -11,7 +11,7 @@ A personal portfolio and blog site, ported from an existing React SPA (`~/Projec
 |---|---------|-------|--------|
 | 1 | Stack & architecture | Foundation | in-progress |
 | 2 | Coding standards & tooling | Foundation | done |
-| 3 | Blog content model | Foundation | planned |
+| 3 | Blog content model | Foundation | done |
 | 4 | Design system & UI foundation | Foundation | planned |
 | 5 | Local dev to deploy walking skeleton | Skeleton | planned |
 | 6 | Home page port | Slice 2 | planned |
@@ -40,10 +40,18 @@ Capture conventions, then install lint, format, and any pre commit checks from t
   Code: `app/eslint.config.js`, `app/.prettierrc.json`, `app/.lintstagedrc.json`, `.githooks/pre-commit`, `.github/workflows/ci.yml`
 - [x] Verify it: `/check verify`, lint/format/typecheck/test confirmed clean, pre commit hook confirmed firing on a real commit, `ci.yml` confirmed green on a real GitHub Actions run (PR #1)
 
-### 3. Blog content model · needs a decision
-Markdown only content shape for blog posts (Astro content collections): frontmatter fields (title, date, slug, tags, excerpt), and the pagination and routing pattern the listing and article pages both depend on. Sanity is retired, nothing migrated.
+### 3. Blog content model
+Markdown/MDX content shape for blog posts (Astro content collections): frontmatter fields (title, date, excerpt, tags; slug comes from the filename), and the pagination and routing pattern the listing and article pages both depend on. Sanity is retired, nothing migrated.
 **Done when:** a sample markdown post validates against the schema and produces the fields later pages need, with no database involved.
-- [ ] Design it (spec): `/architect blog content model`
+- [x] Design it (spec): [0002](../specs/0002-blog-content-model.md)
+- [x] Build it: `/develop blog content model`
+  - [x] MDX integration and the `blog` collection schema (glob loader, Zod), satisfies AC-1, AC-2, AC-6
+  - [x] `getPublishedPosts()` helper: draft filtering, sort with stable tiebreak, satisfies AC-3, AC-4, AC-5
+  - [x] Sample validating post plus a Vitest test for a rejected post, satisfies AC-1, AC-2
+  - [x] Record `PAGE_SIZE` and the three route patterns for later features to build against, satisfies AC-6
+  Code: `app/src/content.config.ts`, `app/src/features/blog/`, `app/src/content/blog/`
+- [x] Verify it: `/check verify`, all six acceptance criteria confirmed against the real build and a running dev server (schema validation, draft filtering dev vs prod, sort with stable tiebreak, empty collection, filename uniqueness); see spec 0002 for the checklist
+- [ ] Test it: `/test`
 
 ### 4. Design system & UI foundation · needs a decision · Medium
 How the existing site's visual language and components (Menu, Avatar, Headline, Timeline, Card, Socials, Pill, Modal, Reveal, Tags) port into Astro: which of Tailwind, MUI, styled components, and Framer Motion carry over versus get replaced by lighter equivalents, base layout, and responsive breakpoints. This decision also carries the performance and accessibility goals (partial hydration, minimal shipped JS).

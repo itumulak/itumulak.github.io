@@ -78,6 +78,7 @@ MCP servers: claude-in-chrome (connected)
 ## Context files
 
 - [app/AGENTS.md](app/AGENTS.md): Astro project specific dev server and documentation notes (create astro default)
+- [app/src/features/blog/AGENTS.md](app/src/features/blog/AGENTS.md): blog content model conventions (content collection, schema, `getPublishedPosts()`, decided URL scheme)
 
 _Drafted by /audit from the repo, worth a quick human pass. Edit freely: once a line stops matching this draft, later runs treat it as curated and will flag rather than overwrite it._
 
