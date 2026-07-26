@@ -22,7 +22,7 @@
 }
 
 @layer base {
-  html {
+  html.smooth-scroll-ready {
     scroll-behavior: smooth;
   }
 
@@ -34,7 +34,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html.smooth-scroll-ready {
     scroll-behavior: auto;
   }
 }

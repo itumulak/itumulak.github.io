@@ -1,5 +1,6 @@
 import type { IconType } from 'react-icons';
-import { FiGithub, FiLinkedin, FiMail, FiGlobe, FiCode, FiBriefcase } from 'react-icons/fi';
+import { FiMail, FiGlobe, FiCode, FiBriefcase } from 'react-icons/fi';
+import { IoLogoGithub, IoLogoLinkedin } from 'react-icons/io5';
 import { FaXTwitter } from 'react-icons/fa6';
 
 /**
@@ -9,8 +10,8 @@ import { FaXTwitter } from 'react-icons/fa6';
  * by name through this registry instead of importing react-icons directly.
  */
 export const ICONS = {
-  github: FiGithub,
-  linkedin: FiLinkedin,
+  github: IoLogoGithub,
+  linkedin: IoLogoLinkedin,
   mail: FiMail,
   globe: FiGlobe,
   code: FiCode,

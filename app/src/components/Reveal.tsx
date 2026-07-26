@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 
 export interface RevealProps {
@@ -22,15 +22,6 @@ export function Reveal({ children, delay = 0, y = 24, once = true, amount = 0.2 
   const ref = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const inView = useInView(ref, { once, amount });
-  const [shouldAnimate, setShouldAnimate] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || reduceMotion) return;
-    const rect = el.getBoundingClientRect();
-    const belowViewport = rect.top > window.innerHeight * (1 - amount);
-    if (belowViewport) setShouldAnimate(true);
-  }, [amount, reduceMotion]);
 
   if (reduceMotion) {
     return <div ref={ref}>{children}</div>;
@@ -39,8 +30,8 @@ export function Reveal({ children, delay = 0, y = 24, once = true, amount = 0.2 
   return (
     <motion.div
       ref={ref}
-      initial={false}
-      animate={shouldAnimate ? (inView ? 'visible' : 'hidden') : 'visible'}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
       variants={{
         hidden: { opacity: 0, y },
         visible: { opacity: 1, y: 0 },
