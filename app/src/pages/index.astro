@@ -1,17 +1,130 @@
 ---
+import { MdOutlineEmail } from 'react-icons/md';
+import { FiTerminal } from 'react-icons/fi';
 
+import Layout from '../layouts/Layout.astro';
+import LayoutHeader from '../components/LayoutHeader.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import Avatar from '../components/Avatar.astro';
+import Headline from '../components/Headline.astro';
+import SubHeadline from '../components/SubHeadline.astro';
+import Tags from '../components/Tags.astro';
+import Card from '../components/Card.astro';
+import { Timeline } from '../components/Timeline';
+import { Reveal } from '../components/Reveal';
+
+import meImg from '../assets/me.jpg';
+import {
+  menuItems,
+  socials,
+  languageStack,
+  libraryStack,
+  databaseStack,
+  cmsStack,
+  toolStack,
+  techStackIcons,
+  projects,
+  experience,
+} from '../features/home/data';
+
+const email = 'ianctumulak@gmail.com';
+const linkedin = 'https://www.linkedin.com/in/itumulak/';
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body>
-    <h1>Astro</h1>
-  </body>
-</html>
+<Layout
+  title="Ian Tumulak — Full Stack Developer"
+  description="Ian Tumulak is a full stack developer from Davao City, Philippines. Portfolio featuring projects, experience, and contact info."
+>
+  <LayoutHeader menuItems={menuItems} socials={socials} />
+
+  <main>
+    <Section id="home">
+      <div class="relative z-10 flex w-full flex-col gap-y-6 lg:w-fit">
+        <Avatar src={meImg} name="Ian Tumulak" />
+        <Reveal client:visible={{ rootMargin: '200px' }}>
+          <h1 class="mx-auto w-fit text-6xl font-black lg:mx-0 lg:text-8xl">
+            Hi, I'm Ian<span class="text-brand">.</span>
+          </h1>
+        </Reveal>
+        <Reveal client:visible={{ rootMargin: '200px' }}>
+          <h2 class="mx-auto w-max text-3xl lg:mx-0 lg:text-4xl">
+            I build <span class="text-brand font-bold italic">awesome things</span>.
+          </h2>
+        </Reveal>
+      </div>
+    </Section>
+
+    <Section id="about">
+      <Headline text="About me" />
+      <div class="flex flex-col gap-y-6">
+        <Container>
+          <Reveal client:visible={{ rootMargin: '200px' }}>
+            <p>
+              I am a full stack developer from <strong>Davao City, Philippines</strong>.
+            </p>
+          </Reveal>
+          <Reveal client:visible={{ rootMargin: '200px' }}>
+            <p>
+              I have been a programmer for almost 15 years now. I started as a WordPress developer
+              but expanded into React, Next.js, and developing enterprise wordpress applications.
+              Recently I am into Go lang for creating backend solutions.
+            </p>
+          </Reveal>
+          <Reveal client:visible={{ rootMargin: '200px' }}>
+            <p>
+              I am actively looking for new positions where I can help <strong
+                >build awesome things</strong
+              >.<br /> If you think you've got an opening for me, feel free to reach out.
+            </p>
+          </Reveal>
+        </Container>
+
+        <div class="flex flex-col gap-y-4">
+          <SubHeadline icon={FiTerminal} text="Tech Stack" />
+          <div class="flex flex-col justify-between gap-8 lg:flex-row">
+            <Tags tags={languageStack} label="Languages" icon={techStackIcons.languages} />
+            <Tags tags={libraryStack} label="Libraries" icon={techStackIcons.libraries} />
+            <Tags tags={databaseStack} label="Database" icon={techStackIcons.database} />
+            <Tags tags={cmsStack} label="CMS" icon={techStackIcons.cms} />
+            <Tags tags={toolStack} label="Tools" icon={techStackIcons.tools} />
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <Section id="projects">
+      <Headline text="Passion Projects" isRight />
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        {projects.map((project) => <Card {...project} />)}
+      </div>
+    </Section>
+
+    <Section id="experience">
+      <Headline text="Experience" />
+      <Timeline experience={experience} client:visible />
+    </Section>
+
+    <Section id="contact">
+      <Headline text="Contact" />
+      <div class="flex flex-col items-center gap-6">
+        <Reveal client:visible={{ rootMargin: '200px' }}>
+          <p class="text-center text-lg font-extralight">
+            Send me an email if you want to connect! You can also reach me on my <a
+              href={linkedin}
+              class="text-brand font-bold">Linkedin</a
+            > profile. <br /> I am actively looking for work and seeking full time opportunities.
+          </p>
+        </Reveal>
+        <Reveal client:visible={{ rootMargin: '200px' }}>
+          <a href={`mailto:${email}`} class="text-center text-2xl font-bold">
+            <span class="hover:text-brand flex flex-row items-center justify-center gap-3">
+              <MdOutlineEmail size={40} aria-hidden="true" />
+              {email}
+            </span>
+          </a>
+        </Reveal>
+      </div>
+    </Section>
+  </main>
+</Layout>

@@ -14,7 +14,7 @@ A personal portfolio and blog site, ported from an existing React SPA (`~/Projec
 | 3 | Blog content model | Foundation | done |
 | 4 | Design system & UI foundation | Foundation | done |
 | 5 | Local dev to deploy walking skeleton | Skeleton | in-progress |
-| 6 | Home page port | Slice 2 | planned |
+| 6 | Home page port | Slice 2 | in-progress |
 | 7 | Blog section on home page | Slice 3 | planned |
 | 8 | Blog listing page | Slice 3 | planned |
 | 9 | Single article page | Slice 4 | planned |
@@ -78,7 +78,8 @@ The thinnest real thread through every layer: Astro scaffold renders one placeho
 ### 6. Home page port
 Full port of the existing single page site (menu, hero/avatar, headline, experience timeline, project cards, socials) into Astro using the design system, matching current content and functionality.
 **Done when:** every section from the existing site renders with the same content, is fully responsive across mobile, tablet, and desktop, and matches existing functionality (menu navigation, modal, reveal animations).
-- [ ] Build it: `/develop home page port`
+- [x] Build it: `/develop home page port`
+  Code: `app/src/pages/index.astro`, `app/src/features/home/data.ts`, `app/src/assets/{me.jpg,ecommerce.png,mern-stack.jpg,firebase-auth.png,docker.png}`, `app/public/resume.pdf`; fixed a real bug found during the port in `app/src/components/Menu.tsx` (mobile drawer was clipped to header height by a `backdrop-filter` containing block)
 
 ## Slice 3: Blog listing
 

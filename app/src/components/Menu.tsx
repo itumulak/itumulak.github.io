@@ -131,7 +131,7 @@ export function Menu({ items }: MenuProps) {
             animate={reduceMotion ? { opacity: 1 } : { x: 0, opacity: 1 }}
             exit={reduceMotion ? { opacity: 0 } : { x: 400, opacity: 0 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="bg-light-dark fixed inset-y-0 right-0 z-20 flex w-3/4 max-w-xs flex-col gap-y-6 p-8 pt-20 md:hidden"
+            className="bg-light-dark fixed top-0 right-0 z-20 flex h-dvh w-3/4 max-w-xs flex-col gap-y-6 p-8 pt-20 md:hidden"
           >
             {items.map((item) => (
               <a
