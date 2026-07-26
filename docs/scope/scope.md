@@ -15,7 +15,7 @@ A personal portfolio and blog site, ported from an existing React SPA (`~/Projec
 | 4 | Design system & UI foundation | Foundation | done |
 | 5 | Local dev to deploy walking skeleton | Skeleton | done |
 | 6 | Home page port | Slice 2 | done |
-| 7 | Blog section on home page | Slice 3 | planned |
+| 7 | Blog section on home page | Slice 3 | done |
 | 8 | Blog listing page | Slice 3 | planned |
 | 9 | Single article page | Slice 4 | planned |
 | 10 | Disqus comments | Slice 5 | planned |
@@ -88,7 +88,10 @@ Full port of the existing single page site (menu, hero/avatar, headline, experie
 ### 7. Blog section on home page
 A recent articles preview list on the home page, pulled from the markdown content collection.
 **Done when:** the home page shows the N most recent posts (title, date, excerpt) linking to their article pages, and renders an empty state gracefully if there are no posts yet.
-- [ ] Build it: `/develop blog section on home page`
+- [x] Build it: `/develop blog section on home page`
+  Preview count (N) picked as a local default of 3, no spec named it; adjust `RECENT_POSTS_COUNT` in `index.astro` if that's wrong. Article links point to the decided `/blog/[slug]/` route (spec 0002), not yet built (feature 9), so they 404 until then.
+  Code: `app/src/pages/index.astro` (new `#blog` section, reads `getPublishedPosts()`), `app/src/features/home/data.ts` (added `Blog` menu item)
+- [x] Verify it: `/check verify`, both Done-when behaviors reproduced live against `docker compose up` (`iantumulak.localhost`): with the sample post present, the `#blog` section lists it (title, date, excerpt) linking to `/blog/hello-world/`; with the content dir emptied, the section shows "No posts yet, check back soon." instead. `Blog` nav item confirmed on both desktop header and mobile drawer. No console errors. `pnpm check` and `pnpm build` both clean.
 
 ### 8. Blog listing page
 A dedicated page listing all articles with pagination.

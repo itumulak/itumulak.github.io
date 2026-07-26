@@ -14,6 +14,8 @@ import Card from '../components/Card.astro';
 import { Timeline } from '../components/Timeline';
 import { Reveal } from '../components/Reveal';
 
+import { getPublishedPosts } from '../features/blog/posts';
+
 import meImg from '../assets/me.jpg';
 import {
   menuItems,
@@ -30,6 +32,9 @@ import {
 
 const email = 'ianctumulak@gmail.com';
 const linkedin = 'https://www.linkedin.com/in/itumulak/';
+
+const RECENT_POSTS_COUNT = 3;
+const recentPosts = (await getPublishedPosts()).slice(0, RECENT_POSTS_COUNT);
 ---
 
 <Layout
@@ -110,6 +115,42 @@ const linkedin = 'https://www.linkedin.com/in/itumulak/';
     <Section id="experience">
       <Headline text="Experience" />
       <Timeline experience={experience} client:visible />
+    </Section>
+
+    <Section id="blog">
+      <Headline text="From the Blog" />
+      {
+        recentPosts.length > 0 ? (
+          <ul class="flex flex-col gap-y-8">
+            {recentPosts.map((post) => (
+              <li>
+                <Reveal client:visible={{ rootMargin: '200px' }}>
+                  <a href={`/blog/${post.id}/`} class="group flex flex-col gap-y-2">
+                    <h3 class="text-text group-hover:text-brand text-xl font-bold transition-colors">
+                      {post.data.title}
+                    </h3>
+                    <time
+                      datetime={post.data.date.toISOString()}
+                      class="text-text/60 text-sm font-extralight"
+                    >
+                      {post.data.date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </time>
+                    <p class="text-text/80 font-extralight">{post.data.excerpt}</p>
+                  </a>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Reveal client:visible={{ rootMargin: '200px' }}>
+            <p class="text-text/80 font-extralight">No posts yet, check back soon.</p>
+          </Reveal>
+        )
+      }
     </Section>
 
     <Section id="contact">

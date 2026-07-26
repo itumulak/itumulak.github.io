@@ -45,6 +45,7 @@ export const menuItems: MenuItem[] = [
   { label: 'About', href: '/#about' },
   { label: 'Projects', href: '/#projects' },
   { label: 'Experience', href: '/#experience' },
+  { label: 'Blog', href: '/#blog' },
   { label: 'Contact', href: '/#contact' },
   { label: 'Resume', href: '/resume.pdf', external: true, emphasized: true },
 ];
