@@ -27,7 +27,8 @@ const items: MenuItem[] = [
 describe('Menu', () => {
   beforeEach(() => {
     mockMatchMedia(false);
-    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
   });
 
   it('renders every item as a desktop nav link', () => {
@@ -145,15 +146,30 @@ describe('Menu', () => {
     expect(document.activeElement).toBe(links[links.length - 1]);
   });
 
-  it('locks body scroll while the panel is open and unlocks it on close', async () => {
+  it('locks body scroll while the panel is open and unlocks it on close, preserving scroll position', async () => {
     const user = userEvent.setup();
+    Object.defineProperty(window, 'scrollY', { writable: true, configurable: true, value: 240 });
     render(<Menu items={items} />);
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.position).toBe('');
 
     await user.click(screen.getByRole('button', { name: 'Open menu' }));
-    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.style.position).toBe('fixed');
+    expect(document.body.style.top).toBe('-240px');
 
     await user.keyboard('{Escape}');
-    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.position).toBe('');
+    expect(document.body.style.top).toBe('');
+  });
+
+  it('restores scroll position instantly on close, bypassing global smooth scroll behavior', async () => {
+    const user = userEvent.setup();
+    Object.defineProperty(window, 'scrollY', { writable: true, configurable: true, value: 240 });
+    const scrollToSpy = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+    render(<Menu items={items} />);
+
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
+    await user.keyboard('{Escape}');
+
+    expect(scrollToSpy).toHaveBeenCalledWith({ top: 240, left: 0, behavior: 'instant' });
   });
 });

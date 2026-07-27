@@ -57,9 +57,19 @@ export function Menu({ items }: MenuProps) {
   useFocusTrap(panelRef, isOpen);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    if (!isOpen) return;
+    const scrollY = window.scrollY;
+    const { body } = document;
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
     return () => {
-      document.body.style.overflow = '';
+      body.style.position = '';
+      body.style.top = '';
+      body.style.left = '';
+      body.style.right = '';
+      window.scrollTo({ top: scrollY, left: 0, behavior: 'instant' });
     };
   }, [isOpen]);
 

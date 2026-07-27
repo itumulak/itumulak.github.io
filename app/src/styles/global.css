@@ -22,6 +22,10 @@
 }
 
 @layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
   html.smooth-scroll-ready {
     scroll-behavior: smooth;
   }
