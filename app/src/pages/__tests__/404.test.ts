@@ -3,7 +3,7 @@ import reactRenderer from '@astrojs/react/server.js';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, it, expect } from 'vitest';
 
-import NotFoundPage from './404.astro';
+import NotFoundPage from '../404.astro';
 
 async function createContainer() {
   const container = await AstroContainer.create();
