@@ -13,7 +13,10 @@ Markdown/MDX blog posts, read through an Astro content collection. Decided in [s
 ## Conventions
 
 - Every route that lists or looks up posts reads through `getPublishedPosts()`, never `getCollection('blog')` directly, or a draft could leak into a production page.
-- The decided URL scheme (not yet built; features 8 and 9 build the actual routes): `/blog/[slug]/` per post, `/blog/` for the listing's page 1, `/blog/page/[page]/` for pages 2 and beyond, split specifically so the listing route can never collide with the article route at the same URL depth.
+- The decided URL scheme: `/blog/[slug]/` per post (built, `../../pages/blog/[slug].astro`, spec 0004), `/blog/` for the listing's page 1, `/blog/page/[page]/` for pages 2 and beyond (listing not yet built, feature 8), split specifically so the listing route can never collide with the article route at the same URL depth.
+- `TagChip.astro` (this dir): renders one tag as a pill, used by the article page to list a post's `tags`. Static, no island.
+- A missing or bad slug renders `../../pages/404.astro` (Astro's static 404 convention), not a redirect.
+- Code fences in article body markdown render through Astro's built in Shiki highlighter (`app/astro.config.mjs`'s `markdown.shikiConfig`, theme `github-dark`), not a separate highlighting library.
 - `blogSchema` must keep importing `z` from `zod`, not `astro:content`; any content collection logic that needs to be unit testable in Vitest has to avoid the `astro:content` virtual module entirely.
 - `getPublishedPosts()` itself cannot be exercised in a plain Vitest run in this project (the Content Layer data store isn't populated outside Astro's own dev/build lifecycle); it was verified via a temporary scratch page under `astro dev` and `astro build` instead (see `/check verify`'s report on spec 0002). Locking its behavior into `/test` needs that same approach, or a decision to invest in Astro's Vitest content testing utilities.
 

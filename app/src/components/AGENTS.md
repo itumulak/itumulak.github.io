@@ -24,6 +24,8 @@ Mobile drawer: `fixed top-0 right-0 h-dvh` (not `inset-y-0`), because the sticky
 
 `MenuItem.emphasized` renders that item as a bordered brand-color pill instead of a plain link (used for "Resume"), matching the legacy site's CTA treatment.
 
+Body scroll lock (while the drawer is open) uses `position: fixed` on `body` with the scroll offset captured in `top` (not `overflow: hidden`): `overflow: hidden` removes the scrollbar with no width compensation on desktop, and is unreliable for actually blocking scroll on mobile Safari. On close, the saved offset is restored via `window.scrollTo({ ..., behavior: 'instant' })`, not a bare `scrollTo(x, y)`: the page enables global `scroll-behavior: smooth` (`global.css`, `html.smooth-scroll-ready`), so a bare call visibly animates the restore instead of snapping back instantly.
+
 ## `Timeline`
 
 `layout="1-column-left"` (single left-aligned column) — the library's default is a two-column alternating (zigzag) layout, which does not match the legacy site. `ExperienceEntry.position` renders as the brand-green heading (company name in the legacy data), `.title` renders as the plain-white subheading (job role) — the field names don't obviously map to which color/prominence they get; check `Timeline.tsx`'s JSX, not just the type, before feeding it data.
